@@ -19,4 +19,4 @@ COPY entrypoint.sh /scratch
 RUN ["chmod", "+x", "/scratch/entrypoint.sh"]
 
 ENTRYPOINT [ "/scratch/entrypoint.sh" ]
-CMD [ "GN-2014A-Q-85" ]
+CMD [ "/bin/bash" ]
