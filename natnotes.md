@@ -91,15 +91,96 @@ In relation to #2. Goal is to get Nifty running in a Docker container.
 
 	- Creating arcade versions of both of these things
 		- Used https://github.com/opencadc/arcade/tree/master/software-containers as inspiration to create docker containers
-		- Built with commands in Makefiles
+		- Built with "docker build -t arcade-nifty:latest -f Dockerfile ."
+		- Ran with a non-root user with "export UID=$(id -u) && export GID=$(id -g) && docker run -it --user $UID:$GID arcade-nifty"
 		- Both seem to work
-	
+
+	- Arcade controls:
+
+```bash
+# List sessions
+curl -E ~/.ssl/cadcproxy.pem https://proto.canfar.net/arcade/session
+
+# Start a new session
+curl -E ~/.ssl/cadcproxy.pem https://proto.canfar.net/arcade/session -d "name=Nat" -d "type=desktop"
+# Delete a session, where <session id> is 8 character code from the list sessions command
+curl -E ~/.ssl/cadcproxy.pem https://proto.canfar.net/arcade/session/<session id> -X DELETE
+```
 
 
+### Updating Nifty to Support CADC Downloads
+
+- Doing a test to just try and download a dataset from CADC
+	- Queried for all cadc data from a particular program
+		- "cadc-tap query -s argus "SELECT observationID FROM caom2.Observation WHERE instrument_name='NIFS' AND proposal_id='GN-2014A-Q-85'"
+	- OKAY. Basically, we have a system for downloading data from CADC. Uses my standard "iraf27" environment, pyvo, and astroquery.
+
+```python
+from astroquery.cadc import Cadc
+import urllib
+
+cadc = Cadc()
+job = cadc.create_async("SELECT observationID, publisherID, productID FROM caom2.Observation \
+	                     AS o JOIN caom2.Plane AS p ON o.obsID=p.obsID \
+	                     WHERE instrument_name='NIFS' AND proposal_id='GN-2014A-Q-85'")
+job.run().wait()
+job.raise_if_error()
+result = job.fetch_result().to_table()
+print(result)
+
+# Store product id's for later
+pids = list(result['productID'])
+
+urls = cadc.get_data_urls(result)
+for url, pid in zip(urls, pids):
+	print(url)
+	print(pid)
+	urllib.urlretrieve(url, pid+".fits")
+```
+
+- Now let's try to add a new command line option to Nifty to download files from CADC.
+	- Should work like "runNifty nifsPipeline -f --cadc GN-2014A-Q-85"
 
 
+- Uploading changes to pypi
+	- Just need to pick a good package name (not nifty4gemini), then in the Nifty4Gemini repo, run
+
+```bash
+rm -r dist/
+python3 setup.py sdist bdist_wheel
+twine upload dist/*
+# Username: __token__
+# Password: See real pypi api token.
+```
 
 
+### Creating a Representative NIFS dataset
+
+- Get number of distinct NIFS programs: "cadc-tap query -s argus "SELECT COUNT (DISTINCT proposal_id) FROM caom2.Observation AS o JOIN caom2.Plane AS p ON o.obsID=p.obsID WHERE instrument_name='NIFS'" "
+
+- Got all distinct proposal ids with representative.py
+
+```python
+from astroquery.cadc import Cadc
+import urllib
+
+cadc = Cadc()
+job = cadc.create_async("SELECT DISTINCT proposal_id FROM caom2.Observation \
+					AS o JOIN caom2.Plane AS p ON o.obsID=p.obsID \
+					WHERE instrument_name='NIFS'")
+job.run().wait()
+job.raise_if_error()
+result = job.fetch_result().to_table()
+for item in result:
+	print(item['proposal_id'])
+```
+
+- Made a spreadsheet of all proposals with their abstract links
+	- GN-2019A-Q-208
+ 	- GN-2012B-Q-74
+ 	- GN-2013A-Q-62
+
+https://archive.gemini.edu/programinfo/GN-2019B-Q-228
 
 
 
