@@ -107,6 +107,12 @@ curl -E ~/.ssl/cadcproxy.pem https://proto.canfar.net/arcade/session -d "name=Na
 curl -E ~/.ssl/cadcproxy.pem https://proto.canfar.net/arcade/session/<session id> -X DELETE
 ```
 
+- After logging into Arcade:
+	- Launch the terminal emulator
+	- "cd /cavern/home/Nat/"
+	- "./nifty.sh"
+	- Woohoo!
+
 
 ### Updating Nifty to Support CADC Downloads
 
@@ -174,6 +180,48 @@ result = job.fetch_result().to_table()
 for item in result:
 	print(item['proposal_id'])
 ```
+
+- Get average exposure time associated with each proposal (keep in mind will be skewed by standard star exposure times, these are counted here)
+
+```python
+from astroquery.cadc import Cadc
+import urllib
+
+cadc = Cadc()
+job = cadc.create_async("SELECT proposal_id, avg(time_exposure) AS val FROM caom2.Observation \
+					AS o JOIN caom2.Plane AS p ON o.obsID=p.obsID \
+					WHERE instrument_name='NIFS' AND type='OBJECT' AND proposal_id LIKE 'GN-2%' GROUP BY proposal_id ORDER BY proposal_id")
+job.run().wait()
+job.raise_if_error()
+result = job.fetch_result().to_table()
+print(result)
+for item in result:
+	print(str(item['proposal_id']) + ' ' + str(item['val']))
+	#print(item['val'])
+```
+
+- Get number of targets associated with each proposal
+
+```python
+from astroquery.cadc import Cadc
+import urllib
+
+cadc = Cadc()
+job = cadc.create_async("SELECT proposal_id, count( DISTINCT target_name ) AS val FROM caom2.Observation \
+					AS o JOIN caom2.Plane AS p ON o.obsID=p.obsID \
+					WHERE instrument_name='NIFS' AND type='OBJECT' AND proposal_id LIKE 'GN-2%' GROUP BY proposal_id ORDER BY proposal_id")
+job.run().wait()
+job.raise_if_error()
+result = job.fetch_result().to_table()
+print(result)
+for item in result:
+	#print(str(item['proposal_id']) + ' ' + str(item['val']))
+	print(item['val'])
+```
+
+
+
+
 
 - Made a spreadsheet of all proposals with their abstract links
 	- GN-2019A-Q-208
