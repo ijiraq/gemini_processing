@@ -301,7 +301,9 @@ queue 1
 
 ```
 
+- Made a script to check if jobs terminated completely without error
 
+`grep "DATA REDUCTION COMPLETE" *.out`
 
 
 
