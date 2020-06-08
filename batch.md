@@ -50,6 +50,7 @@ sudo canfar_batch_prepare
 ```bash
 # Install vos and vos requirements
 pip install vos --upgrade --user
+# Here, if using old vos, make sure to edit the vos config file to point to Cavern!
 
 # Run getCert for vos write permissions
 mkdir ~/.ssl
@@ -78,7 +79,29 @@ Awesome!
 `grep "DATA REDUCTION COMPLETE" *.out`
 
 
+- Here's a submission script that automatically copies all the results of a batch submission to Cavern (use this as the `executable = ...` in your .jdl files:
 
+```bash
+#!/bin/bash
+  
+id=$1
+
+start_time=$(date -u +UT%F-%H%M%S)
+
+scratchdir=${PWD}
+echo $scratchdir
+
+docker run -v ${scratchdir}:/scratch nat1405/nifty:0.1 runNifty nifsPipeline -s 'CADC' -f $1
+
+echo "Starting copy of results to Cavern."
+/home/nat/.local/bin/vmkdir vos:projects/Gemini/reductions/$1-${start_time}
+for file in *; do
+        if [[ "$file" != "pyraf" ]] && [ "$file" != "login.cl" ]; then
+                /home/nat/.local/bin/vcp $file vos:projects/Gemini/reductions/$1-${start_time}/$file
+        fi
+done
+echo "Done."
+```
 
 
 
