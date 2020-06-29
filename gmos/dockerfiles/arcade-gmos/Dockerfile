@@ -33,7 +33,7 @@ RUN ["chmod", "+x", "/usr/bin/arcade_activate"]
 
 # Install GMOS data reduction requirements
 RUN pip install --upgrade pip && \
-    pip install --no-cache-dir astroquery && \
+    pip install --no-cache-dir astroquery==0.4 && \
     pip install --no-cache-dir pyvo
 
 RUN pip install vos --upgrade --user

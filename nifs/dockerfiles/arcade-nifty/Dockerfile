@@ -34,7 +34,7 @@ RUN ["chmod", "+x", "/usr/bin/arcade_activate"]
 # Install development version of Nifty4Gemini
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir https://github.com/Nat1405/Nifty4Gemini/archive/dev.tar.gz && \
-    pip install --no-cache-dir astroquery && \
+    pip install --no-cache-dir 'astroquery==0.4' && \
     pip install --no-cache-dir pyvo
 
 RUN pip install vos --upgrade --user
