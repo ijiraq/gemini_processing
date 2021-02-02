@@ -1,11 +1,9 @@
 
-DEVNAME = arcade-nifty-auto
-
-NAME = bucket.canfar.net/$(DEVNAME)
-VERSION = latest
+NAME = nat1405/nifty
+VERSION = 0.1
 
 build: dependencies Dockerfile
-	docker build -t $(NAME):$(VERSION) -f Dockerfile .
+	docker build --no-cache -t $(NAME):$(VERSION) -f Dockerfile .
 
 dependencies: 
 
