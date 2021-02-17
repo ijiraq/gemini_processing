@@ -2,6 +2,10 @@
 
 FROM continuumio/miniconda3
 
+# Install text editors
+RUN apt-get update && \
+	apt-get install -y vim nano
+
 RUN conda config --add channels http://astroconda.gemini.edu/public && \
 	conda config --add channels http://ssb.stsci.edu/astroconda && \
 	conda create -n dragons python=3.6 dragons stsci && \
