@@ -1,11 +1,10 @@
 
-DEVNAME = niri
-
-NAME = nat1405/$(DEVNAME)
+NAME = nat1405/niri
 VERSION = 0.1
 
+DATE := $(shell date +%Y%m%d-%H%M%S)
 build: dependencies Dockerfile
-	docker build -t $(NAME):$(VERSION) -f Dockerfile .
+	docker build --build-arg TIMESTAMP=$(DATE) -t $(NAME):$(VERSION) -f Dockerfile .
 
 dependencies: 
 

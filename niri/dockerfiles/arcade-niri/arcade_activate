@@ -1,15 +1,15 @@
 #!/bin/bash
 
+source activate dragons
 
-if [ ! -f "/scratch/login.cl" ]; then
-	ln -s /iraf/login.cl /scratch/login.cl
+# To make container useful in both interactive sessions
+# and batch processing, check if xterm is available.
+# If so, start up xterm. If not, get ready for
+# incoming processing command.
+if xhost >& /dev/null; then 
+	# Display exists
+	xterm -T $1
+else 
+	# Display invalid"
+	exec "$@"
 fi
-
-if [ ! -f "~/.geminidr/rsys.cfg" ]; then
-	mkdir ~/.geminidr
-	printf "[calibs]\nstandalone = True\ndatabase_dir = ~/.geminidr/" > ~/.geminidr/rsys.cfg
-fi
-
-conda init bash
-
-exec "$@"
