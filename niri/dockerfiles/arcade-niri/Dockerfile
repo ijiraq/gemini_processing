@@ -4,7 +4,7 @@ FROM continuumio/miniconda3
 
 # Install text editors
 RUN apt-get update && \
-	apt-get install -y vim nano xterm
+	apt-get install -y vim nano xterm curl
 
 RUN conda config --add channels http://astroconda.gemini.edu/public && \
 	conda config --add channels http://ssb.stsci.edu/astroconda && \
