@@ -24,9 +24,10 @@ RUN pip install --upgrade pip && \
     pip install vos --upgrade --user
 
 # echo $TIMESTAMP to force re-install of latest version from GitHub
+# Install latest push of niriPipefrom test pypi
 ARG TIMESTAMP
 RUN echo $TIMESTAMP && \
-	pip install --no-cache-dir https://github.com/Nat1405/niriPipe/archive/pip_package.tar.gz
+	conda run -n dragons pip install --no-cache-dir -i https://test.pypi.org/simple/ niriPipe
 
 ENTRYPOINT [ "/usr/bin/arcade_activate" ]
 CMD [ "/bin/bash" ]
