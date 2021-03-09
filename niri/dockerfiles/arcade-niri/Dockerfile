@@ -23,11 +23,10 @@ RUN pip install --upgrade pip && \
     pip install --no-cache-dir pyvo && \
     pip install vos --upgrade --user
 
-# echo $TIMESTAMP to force re-install of latest version from GitHub
-# Install latest push of niriPipefrom test pypi
-ARG TIMESTAMP
-RUN echo $TIMESTAMP && \
-	conda run -n dragons pip install --no-cache-dir -i https://test.pypi.org/simple/ niriPipe
+# NOTE: need to have a clone of niriPipe repo in this working directory
+# for this build to work.
+COPY niriPipe /niriPipe
+RUN conda run -n dragons pip install /niriPipe
 
 ENTRYPOINT [ "/usr/bin/arcade_activate" ]
 CMD [ "/bin/bash" ]
