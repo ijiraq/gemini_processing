@@ -23,7 +23,8 @@ ADD nsswitch.conf /etc
 RUN conda run -n dragons pip install --upgrade pip && \
     conda run -n dragons pip install --no-cache-dir 'astroquery==0.4' && \
     conda run -n dragons pip install --no-cache-dir pyvo && \
-    conda run -n dragons pip install vos --upgrade --user
+    conda run -n dragons pip install --no-cache-dir vos && \
+    conda run -n dragons pip install --no-cache-dir cadcutils
 
 # NOTE: need to have a clone of niriPipe repo in this working directory
 # for this build to work.
