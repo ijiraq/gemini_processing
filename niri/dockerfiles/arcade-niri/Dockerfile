@@ -8,7 +8,7 @@ RUN apt-get update && \
 
 RUN conda config --add channels http://astroconda.gemini.edu/public && \
 	conda config --add channels http://ssb.stsci.edu/astroconda && \
-	conda create -n dragons python=3.6 dragons stsci && \
+	conda create -n dragons python=3.6 dragons=2.1.1 stsci && \
 	# Make sure to use latest version of DRAGONS
 	conda update -n dragons dragons && \
     conda clean --all -f -y
