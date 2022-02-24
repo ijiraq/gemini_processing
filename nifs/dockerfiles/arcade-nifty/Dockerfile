@@ -3,7 +3,7 @@
 FROM continuumio/miniconda
 
 RUN dpkg --add-architecture i386
-RUN apt-get update -y --fix-missing && \
+RUN apt-get update -y --fix-missing --allow-releaseinfo-change && \
     apt-get upgrade -y && \
     apt-get install -y xauth locales && \
     /usr/sbin/update-locale LANG=C.UTF-8 && locale-gen C.UTF-8

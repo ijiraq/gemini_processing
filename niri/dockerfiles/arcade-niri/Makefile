@@ -1,6 +1,6 @@
 
-NAME = nat1405/niri
-VERSION = 0.1
+NAME = images.canfar.net/gemini/niri
+VERSION = 0.2
 
 build: dependencies Dockerfile
 	docker build -t $(NAME):$(VERSION) -f Dockerfile .
