@@ -29,8 +29,8 @@ RUN /bin/bash -c "source activate iraf27 && mkiraf"
 WORKDIR /scratch
 
 # Create entrypoint script
-COPY arcade_activate /usr/bin/
-RUN ["chmod", "+x", "/usr/bin/arcade_activate"]
+COPY init.sh /skaha/
+RUN ["chmod", "+x", "/skaha/init.sh"]
 
 # Arcade container requirements
 ADD nsswitch.conf /etc
@@ -49,5 +49,5 @@ RUN echo $TIMESTAMP && \
 ENV HOME /scratch
 RUN /bin/bash -c "chmod -R 777 /iraf && chmod -R 777 /scratch"
 
-ENTRYPOINT [ "/usr/bin/arcade_activate" ]
+ENTRYPOINT [ "/skaha/init.sh" ]
 CMD [ "/bin/bash" ]
