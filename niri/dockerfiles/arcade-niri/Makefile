@@ -1,6 +1,6 @@
 
-NAME = images.canfar.net/gemini/niri
-VERSION = 0.2
+NAME = images.canfar.net/gemini/dragons
+VERSION = 0.3
 
 build: dependencies Dockerfile
 	docker build -t $(NAME):$(VERSION) -f Dockerfile .

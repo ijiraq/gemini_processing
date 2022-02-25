@@ -14,8 +14,8 @@ RUN conda config --add channels http://astroconda.gemini.edu/public && \
     conda clean --all -f -y
 
 # Create entrypoint script
-COPY arcade_activate /usr/bin/
-RUN ["chmod", "+x", "/usr/bin/arcade_activate"]
+COPY init.sh /skaha/
+RUN ["chmod", "+x", "/skaha/init.sh"]
 
 # Arcade container requirements
 ADD nsswitch.conf /etc
@@ -26,5 +26,5 @@ RUN conda run -n dragons pip install --upgrade pip && \
     conda run -n dragons pip install --no-cache-dir vos && \
     conda run -n dragons pip install --no-cache-dir cadcutils
 
-ENTRYPOINT [ "/usr/bin/arcade_activate" ]
+ENTRYPOINT [ "/skaha/init.sh" ]
 CMD [ "/bin/bash" ]
