@@ -1,9 +1,9 @@
 #!/bin/bash
 
-echo "[skaha] start init.sh"
-echo "[skaha] start source activate dragons"
+echo "[dragons] start init.sh"
+echo "[dragons] start source activate dragons"
 source activate dragons
-echo "[skaha] end source activate dragons"
+echo "[dragons] end source activate dragons"
 
 # To make container useful in both interactive sessions
 # and batch processing, check if xterm is available.
@@ -16,4 +16,4 @@ else
 	# Display invalid"
 	exec "$@"
 fi
-echo "[skaha] end init.sh"
+echo "[dragons] end init.sh"
