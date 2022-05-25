@@ -1,6 +1,6 @@
 
-NAME = nat1405/nifty
-VERSION = 0.1
+NAME = images.canfar.net/gemini/nifty
+VERSION = 0.3
 
 DATE := $(shell date +%Y%m%d-%H%M%S)
 build: dependencies Dockerfile

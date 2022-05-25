@@ -1,11 +1,9 @@
 #!/bin/bash
 
-
-if [ ! -f "/scratch/login.cl" ]; then
-	ln -s /iraf/login.cl /scratch/login.cl
-fi
-
-source activate iraf27
+echo "[dragons] start init.sh"
+echo "[dragons] start source activate dragons"
+source activate dragons
+echo "[dragons] end source activate dragons"
 
 # To make container useful in both interactive sessions
 # and batch processing, check if xterm is available.
@@ -18,4 +16,4 @@ else
 	# Display invalid"
 	exec "$@"
 fi
-
+echo "[dragons] end init.sh"

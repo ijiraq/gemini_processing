@@ -3,7 +3,7 @@
 FROM continuumio/miniconda
 
 RUN dpkg --add-architecture i386
-RUN apt-get update -y --fix-missing && \
+RUN apt-get update -y --fix-missing --allow-releaseinfo-change && \
     apt-get upgrade -y && \
     apt-get install -y xauth locales && \
     /usr/sbin/update-locale LANG=C.UTF-8 && locale-gen C.UTF-8
@@ -29,8 +29,8 @@ RUN /bin/bash -c "source activate iraf27 && mkiraf"
 WORKDIR /scratch
 
 # Create entrypoint script
-COPY arcade_activate /usr/bin/
-RUN ["chmod", "+x", "/usr/bin/arcade_activate"]
+COPY init.sh /skaha/
+RUN ["chmod", "+x", "/skaha/init.sh"]
 
 # Arcade container requirements
 ADD nsswitch.conf /etc
@@ -49,5 +49,5 @@ RUN echo $TIMESTAMP && \
 ENV HOME /scratch
 RUN /bin/bash -c "chmod -R 777 /iraf && chmod -R 777 /scratch"
 
-ENTRYPOINT [ "/usr/bin/arcade_activate" ]
+ENTRYPOINT [ "/skaha/init.sh" ]
 CMD [ "/bin/bash" ]
